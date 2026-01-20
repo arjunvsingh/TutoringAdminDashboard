@@ -1,21 +1,30 @@
 "use client";
 
 import { Sidebar } from "@/components/layout/Sidebar";
+import { TopBar } from "@/components/layout/TopBar";
+import { StatusFooter } from "@/components/layout/StatusFooter";
 import { SchoolStatusGrid } from "@/components/dashboard/SchoolStatusGrid";
-import { LiveFeed } from "@/components/dashboard/LiveFeed";
-import { GasGauge } from "@/components/dashboard/GasGauge";
-import { QualityAssurance } from "@/components/dashboard/QualityAssurance";
 import { CommandMenu } from "@/components/ui/CommandMenu";
-import { ActivityTicker } from "@/components/dashboard/ActivityTicker";
 import { Copilot } from "@/components/layout/Copilot";
 import { motion } from "framer-motion";
 import { RetroGrid } from "@/components/ui/RetroGrid";
 
 export default function Home() {
+  // Handler for search click - opens the command menu
+  const handleSearchClick = () => {
+    // Trigger keyboard shortcut programmatically
+    const event = new KeyboardEvent('keydown', {
+      key: 'k',
+      metaKey: true,
+      bubbles: true
+    });
+    document.dispatchEvent(event);
+  };
+
   return (
     <div className="flex min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground relative overflow-hidden">
 
-      {/* Background Layer - Simple and clean */}
+      {/* Background Layer */}
       <div className="fixed inset-0 z-0">
         <RetroGrid />
         <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px]" />
@@ -27,17 +36,18 @@ export default function Home() {
       <CommandMenu />
       <Copilot />
 
-      {/* Sidebar - Hidden on mobile, fixed on desktop */}
+      {/* Sidebar */}
       <Sidebar className="hidden md:flex w-64 border-r fixed left-0 top-0 bottom-0 z-20 glass-sidebar backdrop-blur-md bg-background/60" />
 
       {/* Main Content Area */}
       <main className="flex-1 md:ml-64 relative z-10 flex flex-col h-screen overflow-hidden">
 
-        {/* Ticker at the top */}
-        <ActivityTicker />
+        {/* New TopBar */}
+        <TopBar onSearchClick={handleSearchClick} />
 
-        <div className="flex-1 overflow-y-auto p-6 md:p-8 scrollbar-hide">
-          <div className="mx-auto max-w-7xl space-y-8 pb-32">
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto p-6 md:p-8 pb-24 scrollbar-hide">
+          <div className="mx-auto max-w-7xl space-y-6">
 
             {/* Header */}
             <motion.div
@@ -59,32 +69,17 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* School Status Grid (replaces Mission Control) */}
+            {/* School Status Grid - Full Width */}
             <section>
               <SchoolStatusGrid />
             </section>
 
-            {/* Main Grid */}
-            <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Live Feed (Spans 2 columns) */}
-              <LiveFeed />
-
-              {/* Right Column (Gas Gauge + QA) */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
-                className="space-y-8 col-span-1"
-              >
-                <GasGauge />
-                <QualityAssurance />
-              </motion.div>
-            </section>
-
           </div>
         </div>
+
+        {/* Status Footer */}
+        <StatusFooter />
       </main>
     </div>
   );
 }
-
