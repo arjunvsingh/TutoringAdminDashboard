@@ -100,7 +100,7 @@ export default function RosterPage() {
                                                     {student.name}
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <Badge variant={student.status === "Active" ? "good" : student.status === "Review" ? "poor" : "neutral"} className="bg-opacity-10 dark:bg-opacity-20">
+                                                    <Badge variant={student.status === "Active" ? "good" : student.status === "Review" ? "poor" : "secondary"} className="bg-opacity-10 dark:bg-opacity-20">
                                                         {student.status}
                                                     </Badge>
                                                 </td>
