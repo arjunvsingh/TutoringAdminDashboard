@@ -1,8 +1,9 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { AlertTriangle, Clock, TrendingUp } from "lucide-react";
-import { Area, AreaChart, ResponsiveContainer, Tooltip } from "recharts";
+import { AlertTriangle, Clock, TrendingUp, ShieldCheck, FileCheck } from "lucide-react";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, PieChart, Pie, Cell } from "recharts";
+import { GRANT_COMPLIANCE_DATA } from "@/data/mock/GrantComplianceData";
 import { motion } from "framer-motion";
 
 const data = [
@@ -88,27 +89,73 @@ export function Watchtower() {
                 </Card>
             </motion.div>
 
+            {/* Grant Compliance Card - Replaces Generic Hours */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
             >
-                <Card>
+                <Card className="relative overflow-hidden">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Hours Used This Week</CardTitle>
-                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <CardTitle className="text-sm font-medium">Grant Compliance (ESSER)</CardTitle>
+                        <div className={`flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full ${GRANT_COMPLIANCE_DATA.stats.complianceRate >= 80
+                            ? 'bg-emerald-500/10 text-emerald-500'
+                            : 'bg-rose-500/10 text-rose-500'
+                            }`}>
+                            <ShieldCheck className="h-3 w-3" />
+                            {GRANT_COMPLIANCE_DATA.stats.complianceRate >= 80 ? 'COMPLIANT' : 'AT RISK'}
+                        </div>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">1,240</div>
-                        <p className="text-xs text-muted-foreground">
-                            On track for weekly target
-                        </p>
-                        <div className="mt-4 h-2 w-full rounded-full bg-secondary overflow-hidden">
-                            <div className="h-full bg-foreground w-[65%] rounded-full" />
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <div className="text-2xl font-bold">{GRANT_COMPLIANCE_DATA.stats.complianceRate}%</div>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    of students met dosage (3x30m)
+                                </p>
+                            </div>
+
+                            {/* Radial Progress Mini-Chart */}
+                            <div className="h-[60px] w-[60px] relative">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <PieChart>
+                                        <Pie
+                                            data={[
+                                                { name: 'Compliant', value: GRANT_COMPLIANCE_DATA.stats.complianceRate, fill: '#10b981' },
+                                                { name: 'Gap', value: 100 - GRANT_COMPLIANCE_DATA.stats.complianceRate, fill: 'var(--secondary)' }
+                                            ]}
+                                            cx="50%"
+                                            cy="50%"
+                                            innerRadius={20}
+                                            outerRadius={28}
+                                            startAngle={90}
+                                            endAngle={-270}
+                                            dataKey="value"
+                                            stroke="none"
+                                            cornerRadius={10}
+                                        />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                    <FileCheck className="h-4 w-4 text-emerald-500/50" />
+                                </div>
+                            </div>
                         </div>
-                        <div className="mt-2 text-xs text-muted-foreground flex justify-between">
-                            <span>0</span>
-                            <span>Target: 1900</span>
+
+                        {/* Progress Bar Detail */}
+                        <div className="mt-4 space-y-2">
+                            <div className="flex justify-between text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
+                                <span>Mandated Minutes</span>
+                                <span>{GRANT_COMPLIANCE_DATA.stats.deliveredMinutes} / {GRANT_COMPLIANCE_DATA.stats.targetMinutes} avg</span>
+                            </div>
+                            <div className="h-1.5 w-full rounded-full bg-secondary overflow-hidden">
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${(GRANT_COMPLIANCE_DATA.stats.deliveredMinutes / GRANT_COMPLIANCE_DATA.stats.targetMinutes) * 100}%` }}
+                                    transition={{ duration: 1, ease: "easeOut" }}
+                                    className="h-full bg-emerald-500 rounded-full"
+                                />
+                            </div>
                         </div>
                     </CardContent>
                 </Card>

@@ -4,6 +4,8 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { TopBar } from "@/components/layout/TopBar";
 import { StatusFooter } from "@/components/layout/StatusFooter";
 import { SchoolStatusGrid } from "@/components/dashboard/SchoolStatusGrid";
+import { SkillsGapWidget } from "@/components/dashboard/SkillsGapWidget";
+import { TutorImpactCard } from "@/components/dashboard/TutorImpactCard";
 import { CommandMenu } from "@/components/ui/CommandMenu";
 import { Copilot } from "@/components/layout/Copilot";
 import { motion } from "framer-motion";
@@ -68,6 +70,16 @@ export default function Home() {
                 <span className="text-sm font-medium text-muted-foreground">System Operational</span>
               </div>
             </motion.div>
+
+            {/* Analysis Grid */}
+            <div className="grid gap-4 md:grid-cols-3">
+              <section className="md:col-span-1">
+                <SkillsGapWidget />
+              </section>
+              <section className="md:col-span-2">
+                <TutorImpactCard />
+              </section>
+            </div>
 
             {/* School Status Grid - Full Width */}
             <section>

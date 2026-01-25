@@ -6,8 +6,9 @@ import { Sparkles, X, ChevronRight, MessageSquare, AlertTriangle, Zap } from "lu
 
 const predictions = [
     { type: "insight", text: "Based on historical data, usage will peak at 214 active sessions in 45 minutes." },
-    { type: "warning", text: "3 Tutors are likely to be late due to traffic detected near Lincoln High." },
-    { type: "action", text: "Budget utilization is 5% under forecast. Recommend increasing allocation for Math." },
+    { type: "warning", text: "Prediction: 12 students in 'Algebra 1' cohort are 85% likely to fail the upcoming Unit Test based on exit ticket trends." },
+    { type: "action", text: "Dosage Gap: Washington Middle is trending 15% under grant compliance. Recommend scheduling Saturday catch-up sessions." },
+    { type: "insight", text: "Tutor 'Sarah Jenkins' is driving 15% higher retention than peer average." },
 ];
 
 export function Copilot() {
